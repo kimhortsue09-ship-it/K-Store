@@ -1,0 +1,57 @@
+==============================================================================
+ Nova Store — Telegram Mini App Store Kit (Next.js edition)
+ CHANGELOG
+==============================================================================
+
+------------------------------------------------------------------------------
+ v1.0.0  —  2026-07-15   (Initial release)
+------------------------------------------------------------------------------
+
+A complete storefront + admin for Telegram Mini Apps, built with Next.js 15
+(App Router), React 19, TypeScript and Tailwind CSS. 77 routes total
+(43 storefront + 34 admin).
+
+STOREFRONT (43 routes)
+  - Shopping: home, catalog (filters + sort), product detail (gallery,
+    options/variants, specs, reviews, Q&A), cart, checkout, order-success,
+    orders, order tracking + guest track-order lookup, search, categories,
+    wishlist (bulk edit).
+  - Account: profile (avatar chooser), personal-info (photo upload), addresses,
+    payment methods, settings, notifications, language (RTL), help, about, legal.
+  - Extended commerce: deals, coupons, compare, recently-viewed, gift-cards
+    (with QR), rewards, referral, returns, and downloads for digital products
+    (attached files and/or links, plus licence keys). Onboarding, 404, and a
+    component style-guide page.
+  - Wallet: wallet, transactions, transaction detail, send, withdraw,
+    payment-request (with QR).
+
+ADMIN DASHBOARD (32 sections)
+  - Core: dashboard, orders + order detail (status/tracking/notes), a full-page
+    product editor with a multi-image gallery, inventory, categories, customers
+    (with loyalty & staff status), analytics (top selling products).
+  - Catalog & fulfilment: collections, digital keys (paste or import a .txt),
+    returns, abandoned carts, shipping zones.
+  - Marketing & loyalty: marketing, broadcast, discounts, gift cards, loyalty
+    tiers, referrals, templates, reviews & Q&A moderation, content/banners.
+  - Finance: payouts, wallets (credit/debit), transactions, payments, reports.
+  - Operations: support tickets, activity log, staff, integrations, settings.
+
+ARCHITECTURE
+  - Config-first: everything a buyer changes lives in one typed src/config.ts.
+  - Design tokens + Tailwind: dark + light themes; one-tap toggle.
+  - State: one StoreProvider (cart/wishlist/orders) persisted to localStorage,
+    plus a wallet store, with guarded first-visit demo data.
+  - Localization: file-per-language (en, es, ar), RTL-aware.
+  - Payments: one adapter for Telegram Stars, TON Connect and Stripe, plus
+    Cash on Delivery, with a demo-simulate fallback.
+  - SSR-safe Telegram adapter with browser fallbacks.
+  - Typed end-to-end: npm run typecheck and npm run build pass cleanly.
+  - Generated SVG placeholder imagery - resale-safe, no third-party assets.
+
+REQUIREMENTS
+  - Node.js 18.18+ (20+ recommended) and npm.
+  - HTTPS host + a Telegram bot (@BotFather) to go live.
+
+==============================================================================
+ Thank you for your purchase!  -  unusdon
+==============================================================================

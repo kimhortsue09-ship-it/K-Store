@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Nova Kit — Design tokens
+ * Light values live on :root; dark values on :root[data-theme="dark"]. The app ships
+ * dark-first (layout sets data-theme from config.theme.colorScheme), and the theme toggle
+ * simply swaps this attribute. Tailwind colours reference these variables.
+ */
+:root {
+  --accent: #5B6CFF;
+  --accent-strong: #4453D9;
+  --accent-soft: #ECEEFF;
+  --accent-contrast: #FFFFFF;
+  --bg: #FFFFFF;
+  --panel: #F7F8FA;
+  --card: #FFFFFF;
+  --surface: #F2F3F5;
+  --border: #E3E5E9;
+  --text: #14151A;
+  --muted: #5B6270;
+  --faint: #8A909C;
+  --success: #00A854;
+  --danger: #E5484D;
+  --warning: #F59E0B;
+  --info: #2E90FA;
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+:root[data-theme='dark'] {
+  --accent: #8091FF;
+  --accent-strong: #5B6CFF;
+  --accent-soft: rgba(91, 108, 255, 0.18);
+  --accent-contrast: #FFFFFF;
+  --bg: #1A1A1A;
+  --panel: #212121;
+  --card: #2C2C2E;
+  --surface: #2A2A2A;
+  --border: #3A3A3C;
+  --text: #F2F2F7;
+  --muted: #A1A1AA;
+  --faint: #7A7A80;
+  --success: #00E676;
+  --danger: #FF453A;
+  --warning: #FF9F0A;
+  --info: #64D2FF;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+/* Thin, unobtrusive scrollbars to match the app aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+/* Hide horizontal scrollbars on chip/tab rows */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}

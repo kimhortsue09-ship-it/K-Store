@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nova Store — Telegram Mini App Store Kit (Next.js) · Documentation</title>
+<style>
+  :root{
+    --accent:#5B6CFF; --accent-contrast:#FFFFFF; --accent-soft:rgba(91, 108, 255,.14);
+    --bg:#1A1A1A; --panel:#212121; --card:#2C2C2E; --surface:#2A2A2A;
+    --border:#3A3A3C; --text:#F2F2F7; --muted:#A1A1AA; --faint:#7A7A80;
+    --code-bg:#101012; --shadow:0 10px 30px rgba(0,0,0,.35);
+    --radius:14px; --maxw:860px; --sidebar:280px;
+    --note:#64D2FF; --warn:#FF9F0A; --tip:#5B6CFF; --danger:#FF453A;
+    --font:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI','Helvetica Neue',Arial,sans-serif;
+    --mono:'SF Mono',ui-monospace,'Cascadia Code','Consolas','Roboto Mono',monospace;
+  }
+  html[data-theme="light"]{
+    --accent:#5B6CFF; --accent-contrast:#FFFFFF; --accent-soft:#ECEEFF;
+    --bg:#FFFFFF; --panel:#F7F8FA; --card:#FFFFFF; --surface:#F2F3F5;
+    --border:#E3E5E9; --text:#14151A; --muted:#5B6270; --faint:#8A909C;
+    --code-bg:#0E1116; --shadow:0 10px 30px rgba(20,30,50,.10);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  code{font-family:var(--mono);font-size:.9em;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.12em .4em;color:var(--text)}
+  pre{background:var(--code-bg);color:#E6E6EA;border:1px solid var(--border);border-radius:12px;padding:18px 20px;overflow:auto;margin:16px 0}
+  pre code{background:none;border:none;padding:0;color:inherit;font-size:13.5px;line-height:1.7}
+  h1,h2,h3,h4{line-height:1.25;font-weight:700;scroll-margin-top:90px}
+  h2{font-size:26px;margin:56px 0 14px;padding-top:8px;border-top:1px solid var(--border)}
+  h2:first-of-type{border-top:none}
+  h3{font-size:19px;margin:30px 0 8px}
+  h4{font-size:12.5px;margin:20px 0 6px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  p{margin:10px 0} ul,ol{margin:10px 0;padding-left:22px} li{margin:5px 0}
+  .topbar{position:sticky;top:0;z-index:40;display:flex;align-items:center;gap:14px;padding:12px 22px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--border)}
+  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.2px}
+  .brand .logo{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:var(--accent);color:var(--accent-contrast);font-size:19px;box-shadow:var(--shadow)}
+  .brand small{display:block;font-weight:500;font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+  .topbar .spacer{flex:1}
+  .btn{cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:9px;padding:8px 12px;font-size:13px;font-weight:600;font-family:inherit}
+  .btn:hover{border-color:var(--accent)}
+  .menu-btn{display:none}
+  .wrap{display:flex;align-items:flex-start;max-width:1240px;margin:0 auto}
+  .sidebar{position:sticky;top:59px;align-self:flex-start;width:var(--sidebar);flex:none;height:calc(100vh - 59px);overflow-y:auto;padding:22px 14px 60px;border-right:1px solid var(--border)}
+  .sidebar h5{margin:18px 10px 6px;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--faint)}
+  .sidebar a{display:block;color:var(--muted);padding:7px 12px;border-radius:8px;font-size:13.5px;font-weight:500}
+  .sidebar a:hover{background:var(--surface);color:var(--text);text-decoration:none}
+  .sidebar a.active{background:var(--accent-soft);color:var(--accent);font-weight:700}
+  .content{flex:1;min-width:0;padding:34px 40px 120px;max-width:var(--maxw)}
+  .backdrop{display:none}
+  .hero{background:linear-gradient(135deg,var(--accent-soft),transparent);border:1px solid var(--border);border-radius:18px;padding:34px 30px;margin-bottom:8px}
+  .hero .kicker{color:var(--accent);font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:12px}
+  .hero h1{font-size:34px;margin:8px 0 6px;letter-spacing:-.6px}
+  .hero p{color:var(--muted);font-size:16px;max-width:62ch}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .pill{background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:600;color:var(--muted)}
+  .call{border:1px solid var(--border);border-left-width:4px;border-radius:10px;padding:12px 16px;margin:16px 0;background:var(--panel)}
+  .call.note{border-left-color:var(--note)} .call.warn{border-left-color:var(--warn)}
+  .call.tip{border-left-color:var(--tip)} .call.danger{border-left-color:var(--danger)}
+  .call b{display:block;margin-bottom:2px}
+  .call.note b{color:var(--note)} .call.warn b{color:var(--warn)} .call.tip b{color:var(--tip)} .call.danger b{color:var(--danger)}
+  .tw{overflow-x:auto;margin:16px 0;border:1px solid var(--border);border-radius:12px}
+  table{border-collapse:collapse;width:100%;font-size:13.5px}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{background:var(--surface);font-weight:700;white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  td code{white-space:nowrap}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin:18px 0}
+  .feature{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .feature .ic{font-size:22px}
+  .feature h4{color:var(--text);text-transform:none;letter-spacing:0;font-size:14.5px;margin:8px 0 4px}
+  .feature p{color:var(--muted);font-size:13px;margin:0}
+  .step{display:flex;gap:14px;margin:14px 0}
+  .step .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:var(--accent-contrast);display:grid;place-items:center;font-weight:800;font-size:13px}
+  .step .b{flex:1}
+  .step .b h4{color:var(--text);text-transform:none;letter-spacing:0;font-size:15px;margin:2px 0 4px}
+  .kbd{font-family:var(--mono);font-size:12px;background:var(--surface);border:1px solid var(--border);border-bottom-width:2px;border-radius:6px;padding:1px 6px}
+  footer{color:var(--faint);font-size:13px;border-top:1px solid var(--border);margin-top:60px;padding-top:22px}
+  @media(max-width:900px){
+    .menu-btn{display:inline-flex}
+    .sidebar{position:fixed;top:59px;left:0;z-index:35;background:var(--bg);transform:translateX(-100%);transition:transform .22s ease;box-shadow:var(--shadow)}
+    body.nav-open .sidebar{transform:none}
+    body.nav-open .backdrop{display:block;position:fixed;inset:59px 0 0;background:rgba(0,0,0,.5);z-index:34}
+    .content{padding:24px 20px 100px}
+    .hero h1{font-size:27px}
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button class="btn menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <div class="brand"><span class="logo">🛍️</span><span>Nova Store<small>Telegram Mini App Store Kit · Next.js edition</small></span></div>
+  <span class="spacer"></span>
+  <button class="btn" id="themeBtn">◐ Theme</button>
+</div>
+
+<div class="backdrop" id="backdrop"></div>
+<div class="wrap">
+  <nav class="sidebar" id="sidebar">
+    <h5>Getting started</h5>
+    <a href="#welcome">Welcome</a>
+    <a href="#included">What's included</a>
+    <a href="#requirements">Requirements</a>
+    <a href="#quickstart">Quick start</a>
+    <h5>Customise</h5>
+    <a href="#config">Configuration</a>
+    <a href="#theming">Theming &amp; dark mode</a>
+    <a href="#localization">Localization</a>
+    <a href="#catalog">Products &amp; catalog</a>
+    <a href="#payments">Payments</a>
+    <a href="#admin">Admin panel</a>
+    <h5>Ship it</h5>
+    <a href="#deploy">Build &amp; deploy</a>
+    <a href="#telegram">Telegram setup</a>
+    <a href="#data">Connect a backend</a>
+    <a href="#browsers">Browser support</a>
+    <h5>Help</h5>
+    <a href="#faq">Troubleshooting &amp; FAQ</a>
+    <a href="#changelog">Changelog</a>
+    <a href="#support">Support &amp; credits</a>
+  </nav>
+
+  <main class="content">
+    <section class="hero" id="welcome">
+      <div class="kicker">Documentation · v1.0.0 · Next.js edition</div>
+      <h1>Nova Store — Telegram Mini App Store Kit</h1>
+      <p>A complete, config-first e-commerce storefront + admin dashboard for Telegram Mini Apps,
+         built with <b>Next.js 15 (App Router), React 19, TypeScript and Tailwind CSS</b> — a fully
+         typed, component-based storefront + admin for Telegram Mini Apps. Thank you
+         for your purchase!</p>
+      <div class="pills">
+        <span class="pill">77 routes</span>
+        <span class="pill">Storefront + Admin</span>
+        <span class="pill">TypeScript · strict</span>
+        <span class="pill">Tailwind CSS</span>
+        <span class="pill">Dark &amp; Light</span>
+        <span class="pill">3 languages (RTL)</span>
+        <span class="pill">Stars · TON · Stripe</span>
+      </div>
+    </section>
+
+    <p style="margin-top:22px">Almost everything you'll change lives in one file —
+       <code>src/config.ts</code> — so you rarely touch page code. The whole app is typed
+       end-to-end and <code>npm run build</code> passes with zero errors out of the box.</p>
+
+    <h2 id="included">What's included</h2>
+    <div class="grid">
+      <div class="feature"><div class="ic">🛍️</div><h4>43 storefront routes</h4><p>Home, catalog, product (with options), cart, checkout, orders, order tracking, wallet, downloads (licence keys), profile, and every account/feature page.</p></div>
+      <div class="feature"><div class="ic">🛠️</div><h4>34 admin routes</h4><p>The full 32-section drawer plus the product editor — dashboard, orders, products (CSV import/export), inventory, customers, analytics, discounts, payouts, staff, settings…</p></div>
+      <div class="feature"><div class="ic">⚙️</div><h4>Typed config</h4><p>One <code>src/config.ts</code> controls brand, currency, tax/shipping, promos, features, payments, nav and data.</p></div>
+      <div class="feature"><div class="ic">🎨</div><h4>Design tokens + Tailwind</h4><p>Dark-first mint palette with a full light theme and a Black/White toggle. Tailwind maps to CSS variables.</p></div>
+      <div class="feature"><div class="ic">🌍</div><h4>File-per-language i18n</h4><p>English, Spanish and Arabic (RTL) ship in the box. Add a language by dropping in one file.</p></div>
+      <div class="feature"><div class="ic">💳</div><h4>Real payment rails</h4><p>Telegram Stars, TON Connect and Stripe via one adapter, plus Cash on Delivery.</p></div>
+      <div class="feature"><div class="ic">🧩</div><h4>Reusable components</h4><p>TabBar, ThemeToggle, ProductCard, Sheet, Switch, Icon + a typed store context.</p></div>
+      <div class="feature"><div class="ic">🔌</div><h4>Mock or API data</h4><p>Runs on a bundled catalog + <code>localStorage</code> out of the box; point one flag at your API.</p></div>
+    </div>
+
+    <h2 id="requirements">Requirements</h2>
+    <div class="tw"><table>
+      <tr><th>To…</th><th>You need</th></tr>
+      <tr><td>Develop &amp; build</td><td><b>Node.js 18.18+</b> (20+ recommended) and npm. No other global tools.</td></tr>
+      <tr><td>Edit the kit</td><td>A TypeScript-aware editor (VS Code recommended).</td></tr>
+      <tr><td>Go live on Telegram</td><td>An <b>HTTPS</b> host and a bot from <a href="https://t.me/BotFather" target="_blank" rel="noopener">@BotFather</a>.</td></tr>
+      <tr><td>Charge real payments</td><td>A small backend endpoint per rail (see <a href="#payments">Payments</a>). The kit runs in demo mode without one.</td></tr>
+    </table></div>
+
+    <h2 id="quickstart">Quick start</h2>
+    <div class="step"><span class="n">1</span><div class="b"><h4>Install dependencies</h4>
+      <pre><code>cd 02-nextjs-react
+npm install</code></pre></div></div>
+    <div class="step"><span class="n">2</span><div class="b"><h4>Start the dev server</h4>
+      <pre><code>npm run dev        # http://localhost:8001</code></pre>
+      <p>Hard-refresh with <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">R</span> after big changes.</p></div></div>
+    <div class="step"><span class="n">3</span><div class="b"><h4>Make it yours</h4>
+      <p>Open <code>src/config.ts</code> — change the brand, colours, currency and products. Save; the page hot-reloads.</p></div></div>
+
+    <h4>Scripts</h4>
+    <div class="tw"><table>
+      <tr><th>Command</th><th>What it does</th></tr>
+      <tr><td><code>npm run dev</code></td><td>Dev server with hot reload on port 8001.</td></tr>
+      <tr><td><code>npm run build</code></td><td>Production build.</td></tr>
+      <tr><td><code>npm run start</code></td><td>Serve the production build (port 8001).</td></tr>
+      <tr><td><code>npm run typecheck</code></td><td><code>tsc --noEmit</code> — verify types.</td></tr>
+      <tr><td><code>npm run lint</code></td><td><code>next lint</code>.</td></tr>
+    </table></div>
+    <div class="call tip"><b>Testing outside Telegram</b>Every page works in a plain browser too — the Telegram adapter is SSR-safe and falls back to browser equivalents, so you can build and preview without opening Telegram.</div>
+
+    <h2 id="config">Configuration</h2>
+    <p>Open <code>src/config.ts</code> — one typed object (see <code>src/lib/types.ts</code> for the shape).</p>
+    <div class="tw"><table>
+      <tr><th>Block</th><th>What it controls</th></tr>
+      <tr><td><code>brand</code></td><td>Name, short name, tagline, logo emoji/SVG, author, support URL.</td></tr>
+      <tr><td><code>theme</code></td><td><code>colorScheme</code> (auto/light/dark), <code>allowUserToggle</code>, <code>accent</code>, radius, font.</td></tr>
+      <tr><td><code>currency</code></td><td>Code, symbol, position, decimals, separators — used by <code>formatPrice</code>.</td></tr>
+      <tr><td><code>commerce</code></td><td>Tax rate, flat shipping, free-shipping threshold, max qty, promo codes.</td></tr>
+      <tr><td><code>features</code></td><td>Toggle whole areas on/off (search, wishlist, reviews, promo, admin…).</td></tr>
+      <tr><td><code>payments</code></td><td><code>methods</code> + <code>providers</code> (Stars/TON/Stripe) + <code>demoSimulate</code>.</td></tr>
+      <tr><td><code>nav.tabs</code></td><td>The bottom tab bar — reorder, rename or remove tabs.</td></tr>
+      <tr><td><code>data</code></td><td><code>source: 'mock' | 'api'</code>, <code>apiBaseUrl</code>, <code>persistNamespace</code>.</td></tr>
+      <tr><td><code>telegram</code></td><td>WebApp behaviour: enabled, expand, haptics, closing confirmation.</td></tr>
+    </table></div>
+
+    <h2 id="theming">Theming &amp; dark mode</h2>
+    <p>Design tokens live in <code>app/globals.css</code>: light values on <code>:root</code>, dark on
+       <code>:root[data-theme="light"]</code>. Tailwind colours (in <code>tailwind.config.ts</code>)
+       reference these variables, so the Black/White toggle just swaps one attribute.</p>
+    <pre><code>/* app/globals.css */
+:root[data-theme="light"]{
+  --accent:#5B6CFF;   /* your brand colour */
+  --bg:#1A1A1A;
+  --card:#2C2C2E;
+  --text:#F2F2F7;
+}
+/* Tailwind: text-accent, bg-card, border-border … all resolve to these vars */</code></pre>
+    <div class="call note"><b>Two ways to rebrand</b>Fastest: set <code>config.theme.accent</code> to your hex. Full control: edit the tokens in <code>globals.css</code>. The per-page look comes from the real Nova stylesheets in <code>styles/</code>.</div>
+
+    <h2 id="localization">Localization</h2>
+    <div class="step"><span class="n">1</span><div class="b"><h4>Copy a locale file</h4>
+      <p>Duplicate <code>src/lib/locales/en.ts</code> to <code>xx.ts</code> and translate the values.</p></div></div>
+    <div class="step"><span class="n">2</span><div class="b"><h4>Register it</h4>
+      <p>Import it in <code>src/lib/i18n.ts</code> and add its code to <code>config.locale.available</code>.</p></div></div>
+    <div class="step"><span class="n">3</span><div class="b"><h4>Right-to-left?</h4>
+      <p>Add the code to <code>config.locale.rtlLocales</code> — layout direction mirrors automatically (Arabic ships as a working example).</p></div></div>
+
+    <h2 id="catalog">Products &amp; catalog</h2>
+    <p>The bundled catalog lives in <code>src/data/catalog.ts</code> (typed <code>Product[]</code> + categories).
+       Products render generated SVG placeholders from an emoji + colour, so the demo is fully
+       self-contained and resale-safe. Add an <code>image</code> field to use your own artwork.</p>
+    <div class="call tip"><b>First-visit demo data</b><code>src/data/demo.ts</code> seeds a couple of orders, a wishlist and an address once (guarded), so Orders/Downloads/Returns aren't empty on a fresh install. Delete those arrays to ship an empty store.</div>
+
+    <h2 id="payments">Payments</h2>
+    <p>Checkout flows through one guarded adapter — <code>src/lib/payments.ts</code> — driven by
+       <code>config.payments</code>. Three real rails plus Cash on Delivery:</p>
+    <div class="tw"><table>
+      <tr><th>Rail</th><th>How it works</th><th>You provide</th></tr>
+      <tr><td><b>Telegram Stars</b></td><td>Your bot backend creates an invoice link (Bot API <code>createInvoiceLink</code>, currency <code>XTR</code>); the app opens it with <code>WebApp.openInvoice()</code>.</td><td><code>providers.telegramStars.createInvoiceUrl</code></td></tr>
+      <tr><td><b>TON Connect</b></td><td>Pay on-chain from any TON wallet via the TON Connect UI SDK.</td><td><code>manifestUrl</code> + <code>recipientAddress</code></td></tr>
+      <tr><td><b>Stripe</b></td><td>Hosted Checkout Session or Payment Link (redirect; no card data touches the app).</td><td><code>mode</code> + <code>checkoutUrl</code> or <code>paymentLinkUrl</code></td></tr>
+      <tr><td><b>Cash on Delivery</b></td><td>Records a pending order — no gateway needed.</td><td>Nothing.</td></tr>
+    </table></div>
+    <div class="call tip"><b>Works out of the box</b>Leave a rail's fields blank and, with <code>payments.demoSimulate:true</code>, it resolves a simulated success so checkout always completes. Only publishable values/endpoints live in the client — keep secret keys and bot tokens on your server.</div>
+
+    <h2 id="admin">Admin panel</h2>
+    <p>The <code>app/admin/</code> folder is a full merchant dashboard with its own dark-only layout and
+       a slide-up section drawer: dashboard, orders, order detail, products (CSV export), inventory,
+       categories, customers, discounts, reviews, marketing, payouts, analytics, integrations and
+       settings. Reach it from <b>Profile → Admin Panel</b> or <code>/admin</code>.</p>
+    <div class="call note"><b>Demo data</b>Admin figures merge the shopper's real orders with seeded demo history. Point the data layer at your backend for live, shared numbers.</div>
+
+    <h2 id="deploy">Build &amp; deploy</h2>
+    <div class="step"><span class="n">1</span><div class="b"><h4>Build</h4>
+      <pre><code>npm run build
+npm run start        # serves on port 8001</code></pre></div></div>
+    <div class="step"><span class="n">2</span><div class="b"><h4>Host it (two options)</h4>
+      <p><b>Node host</b> (Vercel, a VPS, etc.): deploy the Next.js app directly.<br>
+         <b>Static host</b> (cPanel, any HTTPS bucket): uncomment <code>output: 'export'</code> in
+         <code>next.config.mjs</code>, run <code>npm run build</code>, and upload the <code>out/</code>
+         folder.</p></div></div>
+    <div class="call danger"><b>HTTPS is mandatory</b>Telegram refuses to load Mini Apps over plain HTTP. Enable SSL (most hosts include free Let's Encrypt) before registering the app.</div>
+
+    <h2 id="telegram">Telegram setup</h2>
+    <div class="step"><span class="n">1</span><div class="b"><h4>Create a bot</h4>
+      <p>In <a href="https://t.me/BotFather" target="_blank" rel="noopener">@BotFather</a> send <code>/newbot</code> and follow the prompts.</p></div></div>
+    <div class="step"><span class="n">2</span><div class="b"><h4>Register the Mini App</h4>
+      <p>Use <code>/newapp</code> (or Bot Settings → Menu Button / Web App) and paste your HTTPS URL.</p></div></div>
+    <div class="step"><span class="n">3</span><div class="b"><h4>Open &amp; test</h4>
+      <p>Launch the bot and tap the menu button — your store opens as a native Mini App with themed colours, haptics and the back button wired.</p></div></div>
+
+    <h2 id="data">Connect a backend</h2>
+    <p>State goes through the store (<code>src/lib/store.tsx</code>) and the payments adapter. To use your
+       own backend, set <code>config.data.source = 'api'</code> and <code>apiBaseUrl</code>, then replace
+       the read helpers in the store with <code>fetch()</code> calls to your API. Keep the shape the
+       same — every consumer already relies on it.</p>
+
+    <h2 id="browsers">Browser support</h2>
+    <p>Targets modern evergreen browsers and the Telegram in-app WebView (iOS, Android, Desktop):
+       latest Chrome, Edge, Firefox, Safari and Samsung Internet — the same targets Next.js 15 /
+       React 19 support.</p>
+
+    <h2 id="faq">Troubleshooting &amp; FAQ</h2>
+    <h3>A hydration warning mentions a browser extension attribute</h3>
+    <p>Extensions that inject attributes into <code>&lt;body&gt;</code> can trigger a false hydration
+       warning. The layout already sets <code>suppressHydrationWarning</code>; confirm by testing in an
+       incognito window.</p>
+    <h3>The dev server won't start / port is busy</h3>
+    <p>Change the port in <code>package.json</code> (the <code>-p 8001</code> flag on <code>dev</code>/<code>start</code>).</p>
+    <h3>Payments just show a "demo" success</h3>
+    <p>Expected until you configure a rail. Fill in the provider fields in <code>config.payments</code> (and add a backend endpoint where noted).</p>
+    <h3>Non-English text doesn't match on first paint</h3>
+    <p>The saved locale lives in <code>localStorage</code>, which the server can't read, so a non-default
+       language can briefly differ before hydration. English (the default) is unaffected. For a hard
+       requirement, read the locale from a cookie on the server.</p>
+    <h3>How do I add a page?</h3>
+    <p>Create a folder under <code>app/</code> with a <code>page.tsx</code> (App Router), reuse the shared
+       components, and link to it from a tab or button.</p>
+
+    <h2 id="changelog">Changelog</h2>
+    <div class="call note"><b>v1.0.0 — Initial release</b>
+      A complete Next.js 15 / React 19 / TypeScript / Tailwind storefront + admin: 43 storefront routes +
+      34 admin routes (the full 32-section drawer plus a product editor), config-first architecture, dark + light
+      themes with a Black/White toggle, file-per-language i18n (English, Spanish, Arabic/RTL), product options
+      (variants), downloads for digital products (files and/or links, plus licence keys), a wallet with
+      credit/debit, loyalty tiers, order tracking, payments via Telegram Stars, TON Connect and Stripe (with a
+      demo-simulate fallback) plus Cash on Delivery, and a typed store persisted to localStorage. Typecheck and
+      production build pass with zero errors.</div>
+    <p>The full version history ships as <code>CHANGELOG.md</code> in the project root.</p>
+
+    <h2 id="support">Support &amp; credits</h2>
+    <p>Built by <b>unusdon</b>. If you get stuck, re-read the relevant section above, check the
+       <a href="#faq">FAQ</a>, then reach out through your Envato item's support tab.</p>
+    <h4>Third-party services (optional, buyer-provided)</h4>
+    <ul>
+      <li><b>Telegram WebApp SDK</b> — loaded from <code>telegram.org</code> (required by Telegram Mini Apps).</li>
+      <li><b>TON Connect UI</b> — optional, only if you enable TON payments.</li>
+      <li><b>Stripe</b> — optional hosted checkout, only if you enable card payments.</li>
+    </ul>
+    <p>All demo imagery is generated SVG — no third-party image assets are bundled, so the kit is
+       fully resale-safe.</p>
+
+    <footer>
+      <p>Nova Store — Telegram Mini App Store Kit (Next.js edition) · Documentation v1.0.0 · © unusdon.
+         Sold under the Envato Marketplace license. Happy building! 🚀</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+  var root=document.documentElement, KEY='nova-docs-theme';
+  try{var s=localStorage.getItem(KEY); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  document.getElementById('themeBtn').addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next); try{localStorage.setItem(KEY,next);}catch(e){}
+  });
+  var body=document.body, mb=document.getElementById('menuBtn'), bd=document.getElementById('backdrop');
+  function closeNav(){body.classList.remove('nav-open');}
+  mb.addEventListener('click',function(){body.classList.toggle('nav-open');});
+  bd.addEventListener('click',closeNav);
+  var links=[].slice.call(document.querySelectorAll('.sidebar a'));
+  var map={}; links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a;});
+  links.forEach(function(a){a.addEventListener('click',closeNav);});
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        links.forEach(function(l){l.classList.remove('active');});
+        if(map[en.target.id]) map[en.target.id].classList.add('active');
+      }
+    });
+  },{rootMargin:'-40% 0px -55% 0px'});
+  document.querySelectorAll('main [id]').forEach(function(sec){obs.observe(sec);});
+</script>
+</body>
+</html>

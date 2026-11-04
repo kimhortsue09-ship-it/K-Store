@@ -1,0 +1,98 @@
+/*
+ * Nova Kit — Design Tokens
+ * ========================
+ * The visual foundation of the kit. The DEFAULT look is dark-first with a signature mint
+ * accent (the palette this kit ships with). A full light ("white") theme is included and
+ * the B/W toggle switches between them. Change values here for a pure-CSS re-theme, or set
+ * `config.theme.accent` to force one brand colour across both themes.
+ *
+ * :root holds the LIGHT theme; [data-theme="dark"] overrides for DARK.
+ * (config.theme.colorScheme defaults to 'dark', so the app opens dark out of the box.)
+ */
+
+:root {
+  /* Brand accent (light theme) */
+  --accent:          #5B6CFF;
+  --accent-strong:   #4453D9;
+  --accent-soft:     #ECEEFF;
+  --accent-contrast: #FFFFFF;
+
+  /* Secondary status colours */
+  --success: #00A854;
+  --warning: #F59E0B;
+  --danger:  #E5484D;
+  --info:    #2E90FA;
+
+  /* Surfaces (light) */
+  --bg:         #FFFFFF;
+  --app-backdrop: #E7EDF3;      /* page area behind the centered phone column on wide screens */
+  --surface:    #F2F4F5;
+  --card:       #FFFFFF;
+  --card-alt:   #F7F9FA;
+  --text:       #0B0F0D;
+  --text-muted: #667085;
+  --text-faint: #98A2B3;
+  --border:     #E5E8EB;
+  --track:      #E9ECEF;
+  --overlay:    rgba(11, 15, 13, 0.45);
+
+  /* Radius */
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+  --radius-pill: 999px;
+
+  /* Spacing scale (4px base) */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-7: 32px; --space-8: 48px;
+
+  /* Typography (system font stack) */
+  --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --fs-xs: 11px; --fs-sm: 13px; --fs-md: 15px; --fs-lg: 17px; --fs-xl: 20px; --fs-2xl: 26px;
+  --fw-regular: 400; --fw-medium: 500; --fw-semibold: 600; --fw-bold: 700;
+  --lh-tight: 1.2; --lh-base: 1.45;
+
+  /* Elevation */
+  --shadow-sm: 0 1px 2px rgba(11, 15, 13, 0.06);
+  --shadow-md: 0 4px 16px rgba(11, 15, 13, 0.08);
+  --shadow-lg: 0 12px 40px rgba(11, 15, 13, 0.16);
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 140ms; --dur-med: 240ms;
+
+  /* Layout */
+  --app-max-width: 480px;
+  --appbar-h: 56px;
+  --tabbar-h: 64px;
+}
+
+/* DARK theme — deeper surfaces with a brighter accent for contrast on dark backgrounds. */
+:root[data-theme="dark"] {
+  --accent:          #8091FF;   /* brighter accent for dark backgrounds */
+  --accent-strong:   #5B6CFF;
+  --accent-soft:     rgba(91, 108, 255, 0.18);
+  --accent-contrast: #FFFFFF;   /* text on accent controls */
+
+  --success: #4CAF50;           /* status: success */
+  --warning: #FF9500;           /* status: warning */
+  --danger:  #FF4757;           /* status: danger */
+  --info:    #64D2FF;           /* status: info */
+
+  --bg:         #1A1A1A;        /* app background */
+  --app-backdrop: #0B0B0D;      /* page area behind the centered phone column on wide screens */
+  --surface:    #2A2A2A;        /* secondary background */
+  --card:       #2C2C2E;        /* card surface */
+  --card-alt:   #35353A;        /* raised / hover surface */
+  --text:       #FFFFFF;
+  --text-muted: #8E8E93;        /* muted text */
+  --text-faint: #636366;
+  --border:     #3A3A3C;        /* separators */
+  --track:      #48484A;        /* segmented tracks, icon tiles */
+  --overlay:    rgba(0, 0, 0, 0.6);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.6);
+}

@@ -12,11 +12,15 @@ import type { AppConfig } from '@/lib/types';
 
 export const config: AppConfig = {
   brand: {
-    name: 'Nova Store',
-    shortName: 'Nova',
-    tagline: 'Shop smarter, right inside chat',
-    logoEmoji: '🛍️',
-    logoSvg: null,
+    name: 'My Beauty Shop',
+
+shortName: 'Beauty',
+
+tagline: 'Your Beauty, Your Glow',
+
+logoEmoji: '💄',
+
+logoSvg: null,
     author: 'unusdon',
     supportUrl: '',
   },
